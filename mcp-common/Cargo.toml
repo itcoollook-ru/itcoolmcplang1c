@@ -1,0 +1,18 @@
+[package]
+name = "mcp-common"
+version = "0.7.0"
+edition = "2021"
+rust-version = "1.75"
+authors = ["itcoollook"]
+license = "MIT"
+description = "Общий транспортный и протокольный слой MCP-серверов itcoollook (JSON-RPC, stdio, MCP-типы)"
+
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["io-util", "io-std"] }
+
+[dev-dependencies]
+# Только для тестов: макрос #[tokio::test] и однопоточный рантайм.
+tokio = { version = "1", features = ["macros", "rt"] }

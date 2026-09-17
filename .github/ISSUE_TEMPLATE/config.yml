@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: itcoollook — AI-инструменты для разработчика 1С
+    url: https://itcoollook.ru
+    about: Вопросы о продукте, подписке и остальных инструментах — на сайте.
+  - name: Вопрос по настройке
+    url: https://github.com/itcoollook-ru/itcoolmcplang1c#readme
+    about: Ключи запуска, конфиг, подключение к MCP-клиенту — описаны в README.

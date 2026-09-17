@@ -1,0 +1,55 @@
+[package]
+name = "itcoolmcplang1c"
+version = "0.7.0"
+edition = "2021"
+rust-version = "1.75"
+authors = ["itcoollook"]
+license = "MIT"
+description = "MCP сервер знаний и промптов 1С для itcoollook"
+
+
+[[bin]]
+name = "itcoolmcplang1c"
+path = "src/main.rs"
+
+[dependencies]
+mcp-common = { path = "./mcp-common" }
+# "net" держал только HTTP-транспорт: stdio работает через tokio::io.
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Конфиг читается ровно из одного .toml (config.rs: `File::from(Path)`), поэтому
+# парсеры json/yaml/ini/ron/json5 и неиспользуемые convert-case/async срезаны.
+config = { version = "0.14", default-features = false, features = ["toml"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+# default-features = false срезает builtins (chrono, chrono-tz, rand, slug,
+# humansize, percent-encoding): рабочий prompts.json пользуется только
+# подстановкой `{{ var }}` и `{% if %}`, ни одного фильтра в нём нет, а
+# `Tera::default()` в prompts/renderer.rs builtins не требует.
+tera = { version = "1", default-features = false }
+petgraph = "0.6"
+anyhow = "1"
+walkdir = "2"
+# Самосборка базы знаний из справки платформы 1С (модуль `hbk`).
+flate2 = "1"
+zip = { version = "0.6", default-features = false, features = ["deflate"] }
+regex = "1"
+indexmap = { version = "2", features = ["serde"] }
+html-escape = "0.2"
+
+[dev-dependencies]
+tempfile = "3"
+
+# Пустая таблица [workspace] — граница поиска: без неё cargo уходит вверх по
+# дереву, и клон внутрь чужого workspace ломает сборку сообщением «current
+# package believes it's in a workspace when it's not». Заодно mcp-common из
+# подкаталога становится членом сам: path-зависимости внутри каталога
+# workspace добавляются в него автоматически.
+[workspace]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
